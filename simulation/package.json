@@ -1,0 +1,20 @@
+{
+  "name": "simulation",
+  "version": "1.0.0",
+  "description": "simulate esp32 mqtt data streaming",
+  "main": "simulation.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mqtt",
+    "esp32",
+    "simulate"
+  ],
+  "author": "nakuja",
+  "license": "MIT",
+  "dependencies": {
+    "paho-mqtt": "^1.1.0",
+    "ws": "^8.12.1"
+  }
+}

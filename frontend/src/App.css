@@ -1,0 +1,6 @@
+.App{
+    display: flex;
+}
+.App div{
+    width: 30%;
+}

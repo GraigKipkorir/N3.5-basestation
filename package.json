@@ -1,0 +1,28 @@
+{
+  "name": "n2-avionics-basestation",
+  "version": "1.0.0",
+  "description": "If you are looking to contribute please check out `CONTRIBUTION.md` ## How does it work ?",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "log": "node log.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nakuja/N2-Avionics-BaseStation.git"
+  },
+  "keywords": [
+    "basestation"
+  ],
+  "author": "nakuja",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nakuja/N2-Avionics-BaseStation/issues"
+  },
+  "homepage": "https://github.com/nakuja/N2-Avionics-BaseStation#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "paho-mqtt": "^1.1.0",
+    "ws": "^8.12.1"
+  }
+}
