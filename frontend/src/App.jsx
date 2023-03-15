@@ -3,6 +3,7 @@ import MQTT from 'paho-mqtt'
 import './App.css'
 import LineChart from './components/lineChart';
 import Video from './components/Video';
+import Model from './components/model';
 
 function App() {
 	let altitudeChartRef = useRef();
@@ -92,7 +93,7 @@ function App() {
 						/>
 					</div>
 					<div className="lg:order-first w-full lg:w-10/12 lg:col-span-2">
-						<h3>3D</h3>
+						<Model/>
 					</div>
 				</div>
 				<div className="grid grid-cols-1 lg:grid-cols-3">

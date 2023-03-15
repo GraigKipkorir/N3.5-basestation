@@ -1,32 +1,46 @@
-import { Canvas } from '@react-three/fiber'
-import { useLoader } from '@react-three/fiber'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { useRef, useState } from 'react'
+import { Canvas, useFrame } from '@react-three/fiber'
+import { OrbitControls } from '@react-three/drei'
 
-function Scene() {
-  const gltf = useLoader(GLTFLoader, '/scene.gltf')
+function Box(props) {
+  // This reference gives us direct access to the THREE.Mesh object
+  const ref = useRef()
+  // Hold state for hovered and clicked events
+  const [hovered, hover] = useState(false)
+  const [clicked, click] = useState(false)
+  // Subscribe this component to the render-loop, rotate the mesh every frame
+  useFrame((state, delta) => (ref.current.rotation.y += delta))
+  // Return the view, these are regular Threejs elements expressed in JSX
   return (
-    <Suspense fallback={null}>
-      <primitive object={gltf.scene} />
-    </Suspense>
+    <mesh
+      {...props}
+      ref={ref}
+      scale={clicked ? 1.5 : 1}
+      onClick={(event) => click(!clicked)}
+      onPointerOver={(event) => hover(true)}
+      onPointerOut={(event) => hover(false)}>
+      <boxGeometry args={[1, 3, 1]} />
+      <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />
+    </mesh>
   )
 }
 
-
-function Model() {
+export default function Model() {
   return (
-    <div id="canvas-container">
-    <Canvas>
-      <ambientLight intensity={0.1} />
-      <directionalLight color="red" position={[0, 0, 5]} />
-      <mesh>
-        <boxGeometry />
-        <meshStandardMaterial />
-      </mesh>
-    </Canvas>
-    <Scene/>
-
+    <div className='contents'>
+      <div className='inline'>
+        {
+          // [...Array(10)].map((e, i) => <div key={i}>{i}</div>)
+        }
+      </div>
+      <Canvas>
+        <ambientLight intensity={0.5} />
+        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
+        <pointLight position={[-10, -10, -10]} />
+        <Box position={[0, 0, 0]} />
+        <OrbitControls />
+      </Canvas>
+      <div></div>
     </div>
   )
 }
-
-export default Model
