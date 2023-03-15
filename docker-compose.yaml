@@ -18,39 +18,6 @@ services:
       - mosquitto-log:/mosquitto/log  
     restart: always
 
-  influxdb:
-    image: influxdb:2.3-alpine
-    volumes:
-      # Mount for influxdb data directory and configuration
-      - influxdb2:/var/lib/influxdb2
-    ports:
-      - 8086:8086
-    environment: 
-      # Use these same configurations parameters in your telegraf configuration, mytelegraf.conf.
-      - DOCKER_INFLUXDB_INIT_MODE=setup
-      - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB_USER:-nakuja}
-      - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_PASSWORD:-987654321}
-      - DOCKER_INFLUXDB_INIT_ORG=${INFLUXDB_ORG:-nakuja}
-      - DOCKER_INFLUXDB_INIT_BUCKET=${INFLUXDB_BUCKET:-telemetry}
-      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${INFLUXDB_ADMIN_TOKEN:-myToken}      
-    restart: always
-  telegraf:
-    image: telegraf:1.20-alpine
-    links:
-      - influxdb
-    volumes:
-      # Mount for telegraf config
-      - ./telegraf.conf:/etc/telegraf/telegraf.conf
-    environment: 
-      - DOCKER_INFLUXDB_INIT_ORG=${INFLUXDB_ORG:-nakuja}
-      - DOCKER_INFLUXDB_INIT_BUCKET=${INFLUXDB_BUCKET:-telemetry}
-      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${INFLUXDB_ADMIN_TOKEN:-myToken}      
-    depends_on:
-      - mosquitto
-      - influxdb
-      - client
-    restart: always
-  
 volumes:
   influxdb2:
   mosquitto-data:

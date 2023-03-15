@@ -92,10 +92,13 @@ function App() {
 						/>
 					</div>
 					<div className="lg:order-first w-full lg:w-10/12 lg:col-span-2">
-						<LineChart ref={altitudeChartRef} type="altitude" />
+						<h3>3D</h3>
 					</div>
 				</div>
 				<div className="grid grid-cols-1 lg:grid-cols-3">
+					<div className="w-full lg:w-11/12">
+						<LineChart ref={altitudeChartRef} type="altitude" />
+					</div>
 					<div className="w-full lg:w-11/12">
 						<LineChart ref={velocityChartRef} type="velocity" />
 					</div>
