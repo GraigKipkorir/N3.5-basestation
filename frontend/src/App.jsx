@@ -20,7 +20,7 @@ function App() {
 	let [temperature,setTemperature] = useState(0);
 	let [connectionStatus,setConnectionStatus] = useState('disconnected');
 	
-	let client = new MQTT.Client("127.0.0.1", 1884, "dashboard");
+	let client = new MQTT.Client("192.168.0.108", 1885, "dashboard");
 
 	// called when the client loses its connection
 	let onConnectionLost = (responseObject) => {
@@ -31,37 +31,38 @@ function App() {
 	
 	// called when a message arrives
 	let onMessageArrived = (message) => {
+		//0: "Timestamp"1: "Altitude"2: "ax"3: "ay"4: "az"5: "gx"6: "gy"7: "gz"8: "filtered_s"9: "filtered_v"10: "filtered_a"
 		console.log("onMessageArrived:");
-		let newData = JSON.parse(message.payloadString);
-		// let newData = message.payloadString.split(',');
+		// let newData = JSON.parse(message.payloadString);
+		let newData = message.payloadString.split(',');
 		console.log(newData);
 		let time = Date.now();
-		setAltitude(newData['altitude']);
-		// setGx(newData[8]);
-		// setGy(newData[9]);
-		// setGz(newData[10]);
+		setAltitude(newData[1]);
+		setGx(newData[5]);
+		setGy(newData[6]);
+		setGz(newData[7]);
 		// setLatitude(newData[11]);
 		// setLongitude(newData[12]);
 		// setState(newData[13]);
 		// setTemperature(newData[14]);
-		altitudeChartRef.current.data.datasets[0].data.push({x: time, y:newData['altitude']});
-		// altitudeChartRef.current.data.datasets[1].data.push({x: time, y:newData[1]});
+		altitudeChartRef.current.data.datasets[0].data.push({x: time, y:newData[10]});
+		altitudeChartRef.current.data.datasets[1].data.push({x: time, y:newData[1]});
 		altitudeChartRef.current.update('quiet');
 		//
-		velocityChartRef.current.data.datasets[0].data.push({x: time, y:newData['velocity']});
+		velocityChartRef.current.data.datasets[0].data.push({x: time, y:newData[9]});
 		velocityChartRef.current.update('quiet');
 		//
-		accelerationChartRef.current.data.datasets[0].data.push({x: time, y:newData['y-acceleration']});
-		// accelerationChartRef.current.data.datasets[1].data.push({x: time, y:newData[5]});
-		// accelerationChartRef.current.data.datasets[2].data.push({x: time, y:newData[6]});
-		// accelerationChartRef.current.data.datasets[3].data.push({x: time, y:newData[7]});
+		accelerationChartRef.current.data.datasets[0].data.push({x: time, y:newData[10]});//filterd_a
+		accelerationChartRef.current.data.datasets[1].data.push({x: time, y:newData[3]});
+		accelerationChartRef.current.data.datasets[2].data.push({x: time, y:newData[4]});
+		accelerationChartRef.current.data.datasets[3].data.push({x: time, y:newData[5]});
 		accelerationChartRef.current.update('quiet');
 	}
 
 	//called when client connects
 	let onConnect = () => {
 		console.log("connected");
-		client.subscribe("esp32");
+		client.subscribe("ESP32/Connect/Success");
 	}
 	// set callback handlers
 	client.onConnectionLost = onConnectionLost;
@@ -94,7 +95,7 @@ function App() {
 						/>
 					</div>
 					<div className="lg:order-first w-full lg:w-10/12 lg:col-span-2">
-						<Model/>
+						<Model x={gx} y={gy} z={gz} />
 					</div>
 				</div>
 				<div className="grid grid-cols-1 lg:grid-cols-3">

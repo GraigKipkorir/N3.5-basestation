@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useRef, useState,forwardRef,memo } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 
@@ -9,7 +9,7 @@ function Box(props) {
   const [hovered, hover] = useState(false)
   const [clicked, click] = useState(false)
   // Subscribe this component to the render-loop, rotate the mesh every frame
-  useFrame((state, delta) => (ref.current.rotation.y += delta))
+  useFrame((state, delta) => (ref.current.rotation.x = props.x, ref.current.rotation.y = props.y, ref.current.rotation.z = props.z))
   // Return the view, these are regular Threejs elements expressed in JSX
   return (
     <mesh
@@ -25,7 +25,7 @@ function Box(props) {
   )
 }
 
-export default function Model() {
+export default function Model(props) {
   return (
     <div className='contents'>
       <div className='inline'>
@@ -37,7 +37,7 @@ export default function Model() {
         <ambientLight intensity={0.5} />
         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
         <pointLight position={[-10, -10, -10]} />
-        <Box position={[0, 0, 0]} />
+        <Box x={props.x} y={props.y} z={props.z} position={[0, 0, 0]} />
         <OrbitControls />
       </Canvas>
       <div></div>

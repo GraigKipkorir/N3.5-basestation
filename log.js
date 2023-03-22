@@ -2,7 +2,7 @@ const mqtt = require('paho-mqtt');
 global.WebSocket = require('ws');
 let fs = require('fs');
 
-client = new mqtt.Client("127.0.0.1", 1884, "logger");
+client = new mqtt.Client("127.0.0.1", 1885, "logger");
  
 // set callback handlers
 client.onConnectionLost = onConnectionLost;
@@ -20,7 +20,7 @@ let filename = 'logs.csv';
 function onConnect() {
     // Once a connection has been made, make a subscription and send a message.
     console.log("onConnect");
-    client.subscribe("esp32");
+    client.subscribe("ESP32/Connect/Success");
     filename = 'logs/log_'+epoch.toString().slice(6)+'.csv';
 }
    

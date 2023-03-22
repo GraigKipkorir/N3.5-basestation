@@ -1,4 +1,4 @@
-import { useState, useEffect, forwardRef,memo } from 'react';
+import { forwardRef,memo } from 'react';
 import { Line } from 'react-chartjs-2';
 import 'chartjs-adapter-luxon';
 import StreamingPlugin from 'chartjs-plugin-streaming';
