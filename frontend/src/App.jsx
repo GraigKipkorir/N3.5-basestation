@@ -20,7 +20,7 @@ function App() {
 	let [temperature,setTemperature] = useState(0);
 	let [connectionStatus,setConnectionStatus] = useState('disconnected');
 	
-	let client = new MQTT.Client("192.168.0.108", 1885, "dashboard");
+	let client = new MQTT.Client("127.0.0.1", 1885, "dashboard");
 
 	// called when the client loses its connection
 	let onConnectionLost = (responseObject) => {
