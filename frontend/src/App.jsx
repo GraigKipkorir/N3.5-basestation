@@ -4,23 +4,31 @@ import './App.css'
 import LineChart from './components/lineChart';
 import Video from './components/Video';
 import Model from './components/model';
+import Countdown from './components/countdown';
+import Telemetry from './components/telemetry';
+import Settings from './components/settings';
+import setting from './assets/setting.svg';
 
 function App() {
 	let altitudeChartRef = useRef();
 	let velocityChartRef = useRef();
 	let accelerationChartRef = useRef();
 
+	let toRadians = (angle) => {
+		return angle * (Math.PI / 180);
+	}
+
 	let [altitude,setAltitude] = useState(0);//filterd altitude
-	let [gx,setGx] = useState(0);
-	let [gy,setGy] = useState(0);
-	let [gz,setGz] = useState(0);
+	let [gx,setGx] = useState(toRadians(0));
+	let [gy,setGy] = useState(toRadians(180));
+	let [gz,setGz] = useState(toRadians(0));
 	let [latitude,setLatitude] = useState(0);
 	let [longitude,setLongitude] = useState(0);
 	let [state,setState] = useState(0);
 	let [temperature,setTemperature] = useState(0);
 	let [connectionStatus,setConnectionStatus] = useState('disconnected');
 	
-	let client = new MQTT.Client("127.0.0.1", 1885, "dashboard");
+	let client = new MQTT.Client("192.168.0.109", 1885, "dashboard");
 
 	// called when the client loses its connection
 	let onConnectionLost = (responseObject) => {
@@ -75,18 +83,20 @@ function App() {
 
   return (
 		<div className="lg:max-h-screen max-w-screen overflow-hidden">
+			<Settings />
 			<main className="p-2">
 				<div className="text-sm lg:text-base text-center">
 					The WebSocket is currently {connectionStatus}
 				</div>
 				<div className="text-xs lg:text-base md:w-2/3 mx-auto font-bold flex flex-wrap justify-between">
-					<span>
-						Timestamp:{' '}
+					<span className=' text-3xl'>
+					T{true?'-':'+'} <Countdown target="March 18, 2023 18:00:00"/>
 					</span>
 					<span>State:{state} </span>
 					<span>Altitude: {altitude}</span>
 					<span>Longitude:{longitude} </span>
 					<span>Latitude: {latitude} </span>
+					<button onClick={e=>{}}><img src={setting} className=""/></button>
 				</div>
 				<div className="grid grid-cols-1 lg:grid-cols-3">
 					<div>
@@ -94,7 +104,8 @@ function App() {
 							url={'http://192.168.0.103:81/stream'}
 						/>
 					</div>
-					<div className="lg:order-first w-full lg:w-10/12 lg:col-span-2">
+					<Telemetry />
+					<div className="lg:order-first w-full lg:w-12/12 lg:col-span-2">
 						<Model x={gx} y={gy} z={gz} />
 					</div>
 				</div>

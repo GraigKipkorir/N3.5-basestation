@@ -1,24 +1,21 @@
-import React, { useRef, useEffect,useState } from "react";
-import mapboxgl from "mapbox-gl";
+import { MapContainer, TileLayer, useMap, Marker, Popup } from 'react-leaflet'
+import "leaflet/dist/leaflet.css"
 
-export default function Map() {
-  let mapContainer = useRef(null);
-  //jkuat ipic coordinates (lat,lon) -1.0953775626377544, 37.01223403257954
-  let [lng, setLng] = useState(37.01223403257954);
-  let [lat, setLat] = useState(-1.0953775626377544);
-
-  useEffect(() => {
-    mapboxgl.accessToken = "pk.eyJ1IjoidGhlcGFyYWRveDIwIiwiYSI6ImNsZHdlMnpyMTA2bGUzbnBob2Jld2l3NmUifQ.zrAEdfZdTfrWr9yvSuu9Xg";
-    let map = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: "mapbox://styles/mapbox/streets-v11",
-      center: [lng, lat],
-      zoom: 17
-    });
-
-    return () => map.remove();
-  }, []);
-
-  return <div ref={mapContainer} style={{ width: "100%", height: "90%" }} />;
-};
-
+export default function Map(){
+    return(
+        <div>
+            <h3>Map</h3>
+            <MapContainer style={{height:"500px"}} center={[-1.091176, 37.011073]} zoom={15} scrollWheelZoom={true}>
+                <TileLayer
+                    attribution='&copy; <a href=\"https://www.maptiler.com/copyright/\" target=\"_blank\">&copy; MapTiler</a> <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\">&copy; OpenStreetMap contributors</a> contributors'
+                    url="http://[::]:8080/styles/basic-preview/{z}/{x}/{y}.png"
+                />
+                <Marker position={[-1.091176, 37.011073]}>
+                    <Popup>
+                    A pretty CSS3 popup. <br /> Easily customizable.
+                    </Popup>
+                </Marker>
+            </MapContainer>
+        </div>
+    )
+}

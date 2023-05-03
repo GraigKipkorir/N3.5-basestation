@@ -8,7 +8,10 @@ function Rocket(props) {
   // This reference gives us direct access to the THREE.Mesh object
   const ref = useRef()
   // Subscribe this component to the render-loop, rotate the mesh every frame
-  useFrame((state, delta) => (ref.current.rotation.x = props.x, ref.current.rotation.y = props.y, ref.current.rotation.z = props.z))
+  useFrame((state, delta) => {
+    // console.log(delta);
+    (ref.current.rotation.x = props.x, ref.current.rotation.y = props.y, ref.current.rotation.z = props.z)
+  })
   // Return the view, these are regular Threejs elements expressed in JSX
   return (
     <mesh
@@ -28,12 +31,13 @@ export default function Model(props) {
           // [...Array(10)].map((e, i) => <div key={i}>{i}</div>)
         }
       </div>
-      <Canvas>
+      <Canvas camera={{ position: [0, 10, 5], rotation: [0,0,0] }}>
         <ambientLight intensity={0.5} />
         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
         <pointLight position={[-10, -10, -10]} />
-        <Rocket x={props.x} y={props.y} z={props.z} position={[0, 0, 0]} />
+        <Rocket x={props.x} y={props.y} z={props.z} position={[-3, -3, 1]} />
         <OrbitControls />
+        <axesHelper args={[5]} /> {/*X axis is red, the Y axis is green and the Z axis is blue.*/}
       </Canvas>
       <div></div>
     </div>

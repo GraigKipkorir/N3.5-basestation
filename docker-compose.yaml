@@ -17,8 +17,12 @@ services:
       - mosquitto-data:/mosquitto/data
       - mosquitto-log:/mosquitto/log  
     restart: always
+  mosquitto:
+    image: maptiler/tileserver-gl:latest
+    ports:
+      - 8080:8080 
+    restart: always
 
 volumes:
-  influxdb2:
   mosquitto-data:
   mosquitto-log:
