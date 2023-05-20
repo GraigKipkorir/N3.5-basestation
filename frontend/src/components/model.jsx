@@ -35,7 +35,7 @@ export default function Model(props) {
         <ambientLight intensity={0.5} />
         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
         <pointLight position={[-10, -10, -10]} />
-        <Rocket x={props.x} y={props.y} z={props.z} position={[-3, -3, 1]} />
+        <Rocket x={props.x} y={props.y} z={props.z} position={[-3, -3, -9]} />
         <OrbitControls />
         <axesHelper args={[5]} /> {/*X axis is red, the Y axis is green and the Z axis is blue.*/}
       </Canvas>

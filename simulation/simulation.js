@@ -16,7 +16,7 @@ const readline = require('readline');
 const fs = require('fs');
 global.WebSocket = require('ws');
 
-client = new mqtt.Client("127.0.0.1", 1885, "simulator");
+client = new mqtt.Client("127.0.0.1", 1884, "simulator");
  
 // set callback handlers
 client.onConnectionLost = onConnectionLost;

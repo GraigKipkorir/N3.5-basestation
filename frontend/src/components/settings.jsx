@@ -4,8 +4,9 @@ export default function Settings() {
 
   return (
     <div className="overlay" id="settings">
-      <div className="container mx-auto mt-5 rounded-lg h-vh bg-slate-100">
+      <div className="relative container mx-auto mt-5 rounded-lg h-vh bg-slate-100">
         <h1>Settings</h1>
+        <button className="absolute right-0 text-xl" onClick={e=>{document.getElementById('settings').style.visibility='hidden'}}>X</button>
         <div className="flex justify-around">
           <button>Broker</button>
           <button>3D Model</button>

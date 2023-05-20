@@ -20,7 +20,7 @@ let filename = 'logs.csv';
 function onConnect() {
     // Once a connection has been made, make a subscription and send a message.
     console.log("onConnect");
-    client.subscribe("ESP32/Connect/Success");
+    client.subscribe("piston/force");
     filename = 'logs/log_'+epoch.toString().slice(6)+'.csv';
 }
    
@@ -33,13 +33,13 @@ function onConnectionLost(responseObject) {
 
 // called when a message arrives
 function onMessageArrived(message) {
-    console.log("onMessageArrived:");
+    // console.log("onMessageArrived:");
     try{
         fs.appendFile(filename,message.payloadString+'\n',(e)=>{
             if(e){
                 console.log(e);
             }
-            console.log('updated');
+            console.log(message.payloadString);
         });
     } catch(err){
         console.log(err);

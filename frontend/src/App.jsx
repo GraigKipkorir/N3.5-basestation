@@ -6,9 +6,9 @@ import Video from './components/Video';
 import Model from './components/model';
 import Countdown from './components/countdown';
 import Telemetry from './components/telemetry';
-import Settings from './components/settings';
 import setting from './assets/setting.svg';
 
+let client = new MQTT.Client("127.0.0.1", 1884, "dashboard");
 function App() {
 	let altitudeChartRef = useRef();
 	let velocityChartRef = useRef();
@@ -28,8 +28,6 @@ function App() {
 	let [temperature,setTemperature] = useState(0);
 	let [connectionStatus,setConnectionStatus] = useState('disconnected');
 	
-	let client = new MQTT.Client("192.168.0.109", 1885, "dashboard");
-
 	// called when the client loses its connection
 	let onConnectionLost = (responseObject) => {
 		if (responseObject.errorCode !== 0) {
@@ -83,20 +81,19 @@ function App() {
 
   return (
 		<div className="lg:max-h-screen max-w-screen overflow-hidden">
-			<Settings />
 			<main className="p-2">
 				<div className="text-sm lg:text-base text-center">
 					The WebSocket is currently {connectionStatus}
 				</div>
 				<div className="text-xs lg:text-base md:w-2/3 mx-auto font-bold flex flex-wrap justify-between">
 					<span className=' text-3xl'>
-					T{true?'-':'+'} <Countdown target="March 18, 2023 18:00:00"/>
+					T{true?'-':'+'} <Countdown target="May 18, 2023 18:00:00"/>
 					</span>
 					<span>State:{state} </span>
 					<span>Altitude: {altitude}</span>
 					<span>Longitude:{longitude} </span>
 					<span>Latitude: {latitude} </span>
-					<button onClick={e=>{}}><img src={setting} className=""/></button>
+					<button onClick={e=>{document.getElementById('settings').style.visibility='visible'}}><img src={setting} className=""/></button>
 				</div>
 				<div className="grid grid-cols-1 lg:grid-cols-3">
 					<div>
