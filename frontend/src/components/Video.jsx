@@ -22,12 +22,7 @@ function Video({ url }) {
 
 	return (
 		<>
-			<div className='choice'>
-				<button id={stream?'active':''} onClick={(e)=>{setStream(true)}}>Live Stream</button>
-				<button id={stream?'':'active'} onClick={(e)=>{setStream(false)}}>Map</button>
-			</div>
-			{stream ? (
-				<div className="w-full h-[297px] md:h-[603px] lg:h-[500px] bg-black flex justify-center items-center">
+		<div className="w-full h-[297px] md:h-[603px] lg:h-[500px] bg-black flex justify-center items-center">
 					<div ref={image}>
 						<img
 							alt="logo"
@@ -37,9 +32,6 @@ function Video({ url }) {
 						/>
 					</div>
 				</div>
-			) :
-			<Map/>
-			}
 		</>
 	);
 }

@@ -6,9 +6,20 @@ import Video from './components/Video';
 import Model from './components/model';
 import Countdown from './components/countdown';
 import Telemetry from './components/telemetry';
+import Map from './components/Map';
 import setting from './assets/setting.svg';
 
 let client = new MQTT.Client("127.0.0.1", 1884, "dashboard");
+//called when client connects
+let onConnect = () => {
+	console.log("connected");
+	client.subscribe("ESP32/Connect/Success");
+}
+// connect the client
+client.connect({
+	onSuccess:onConnect,
+	keepAliveInterval: 3600,
+});
 function App() {
 	let altitudeChartRef = useRef();
 	let velocityChartRef = useRef();
@@ -27,12 +38,14 @@ function App() {
 	let [state,setState] = useState(0);
 	let [temperature,setTemperature] = useState(0);
 	let [connectionStatus,setConnectionStatus] = useState('disconnected');
+	let [stream,setStream] = useState(true);
 	
 	// called when the client loses its connection
 	let onConnectionLost = (responseObject) => {
 		if (responseObject.errorCode !== 0) {
 		console.log("onConnectionLost:"+responseObject.errorMessage);
 		}
+		
 	}
 	
 	// called when a message arrives
@@ -41,14 +54,13 @@ function App() {
 		console.log("onMessageArrived:");
 		// let newData = JSON.parse(message.payloadString);
 		let newData = message.payloadString.split(',');
-		console.log(newData);
 		let time = Date.now();
 		setAltitude(newData[1]);
 		setGx(newData[5]);
 		setGy(newData[6]);
 		setGz(newData[7]);
-		// setLatitude(newData[11]);
-		// setLongitude(newData[12]);
+		setLatitude(newData[11]);
+		setLongitude(newData[12]);
 		// setState(newData[13]);
 		// setTemperature(newData[14]);
 		altitudeChartRef.current.data.datasets[0].data.push({x: time, y:newData[10]});
@@ -65,19 +77,10 @@ function App() {
 		accelerationChartRef.current.update('quiet');
 	}
 
-	//called when client connects
-	let onConnect = () => {
-		console.log("connected");
-		client.subscribe("ESP32/Connect/Success");
-	}
 	// set callback handlers
 	client.onConnectionLost = onConnectionLost;
 	client.onMessageArrived = onMessageArrived;
-	// connect the client
-	client.connect({
-		onSuccess:onConnect,
-		keepAliveInterval: 3600,
-	});
+	
 
   return (
 		<div className="lg:max-h-screen max-w-screen overflow-hidden">
@@ -97,9 +100,16 @@ function App() {
 				</div>
 				<div className="grid grid-cols-1 lg:grid-cols-3">
 					<div>
+						<div className='choice'>
+							<button id={stream?'active':''} onClick={(e)=>{setStream(true)}}>Live Stream</button>
+							<button id={stream?'':'active'} onClick={(e)=>{setStream(false)}}>Map</button>
+						</div>
+						{stream?
 						<Video
 							url={'http://192.168.0.103:81/stream'}
 						/>
+						:<Map position={[latitude,longitude]}/>
+						}
 					</div>
 					<Telemetry />
 					<div className="lg:order-first w-full lg:w-12/12 lg:col-span-2">
