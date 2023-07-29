@@ -2,7 +2,7 @@ const mqtt = require('paho-mqtt');
 global.WebSocket = require('ws');
 let fs = require('fs');
 
-client = new mqtt.Client("127.0.0.1", 1885, "logger");
+client = new mqtt.Client("127.0.0.1", 1883, "logger");
  
 // set callback handlers
 client.onConnectionLost = onConnectionLost;
@@ -20,7 +20,7 @@ let filename = 'logs.csv';
 function onConnect() {
     // Once a connection has been made, make a subscription and send a message.
     console.log("onConnect");
-    client.subscribe("piston/force");
+    client.subscribe("n3/telemetry");
     filename = 'logs/log_'+epoch.toString().slice(6)+'.csv';
 }
    
@@ -35,7 +35,7 @@ function onConnectionLost(responseObject) {
 function onMessageArrived(message) {
     // console.log("onMessageArrived:");
     try{
-        fs.appendFile(filename,message.payloadString+'\n',(e)=>{
+        fs.appendFile(filename,new Date().toUTCString()+message.payloadString+'\n',(e)=>{
             if(e){
                 console.log(e);
             }

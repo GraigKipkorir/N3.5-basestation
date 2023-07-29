@@ -16,7 +16,7 @@ const readline = require('readline');
 const fs = require('fs');
 global.WebSocket = require('ws');
 
-client = new mqtt.Client("127.0.0.1", 1884, "simulator");
+client = new mqtt.Client("127.0.0.1", 1883, "simulator");
  
 // set callback handlers
 client.onConnectionLost = onConnectionLost;
@@ -57,16 +57,14 @@ function onConnect() {
   // client.subscribe("esp32");
   //{y-acceleration:200.00, velocity:127.99, altitude:132.23, pressure: 1013.23}
   //123456789,1214.23,1201.45,230.45,12.23,1.03,0.23,12.00,4.55,3.21,1.97,-1.0953775626377544, 37.01223403257954,PRE_FLIGHT_GROUND_STATE,44.999
-  let latitude = -1.0953775626377544
-  let longitude = 37.01223403257954
+  let id = 0;
   let setMessaage = ()=>{
-    message = new mqtt.Message(`123456789,1214.23,1201.45,230.45,12.23,1.03,0.23,12.00,4.55,3.21,1.97,${latitude},${longitude},PRE_FLIGHT_GROUND_STATE,44.999`);
-    message.destinationName = "ESP32/Connect/Success";
-    latitude+=0.001;
-    longitude+=0.001;
+    message = new mqtt.Message(`${id},${new Date().toUTCString()},123456789,1214.23,1201.45,230.45,12.23,1.03,0.23,12.00,4.55,3.21,1.97,-1.0953775626377544, 37.01223403257954,PRE_FLIGHT_GROUND_STATE,44.999`);
+    message.destinationName = "n3/telemetry";
+    id+=1;
     return message;
   }
-  setInterval(() => {client.send(setMessaage());latitude+=0.000000000001;longitude+=0.000000000001}, 100);
+  setInterval(() => {client.send(setMessaage())}, 100);
 }
  
 // called when the client loses its connection
