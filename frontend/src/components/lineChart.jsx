@@ -30,22 +30,14 @@ let LineChart = forwardRef( (props,ref) => {
 
     switch(props.type){
         case 'altitude':
-            ylabel = 'Altitude (m)';
+            ylabel = 'AGL (m)';
             dataset = [
 				{
 					id: 1,
-					label: 'filtered altitude',
-					backgroundColor: 'rgba(255, 99, 132, 0.5)',
-					borderColor: 'rgb(255, 99, 132)',
-					data: [],
-					borderWidth: 2,
-					pointRadius: 2,
-				},
-				{
-					id: 2,
-					label: 'raw altitude',
+					label: 'AGL',
 					backgroundColor: 'rgba(54, 162, 235, 0.5)',
 					borderColor: 'rgb(54, 162, 235)',
+					cubicInterpolationMode: 'monotone',
 					data: [],
 					pointRadius: 2,
 				},
@@ -59,6 +51,7 @@ let LineChart = forwardRef( (props,ref) => {
 					label: 'filtered velocity',
 					backgroundColor: 'rgba(255, 99, 132, 0.5)',
 					borderColor: 'rgb(255, 99, 132)',
+					cubicInterpolationMode: 'monotone',
 					data: [],
 				},
 			];
@@ -68,27 +61,22 @@ let LineChart = forwardRef( (props,ref) => {
             dataset = [
 				{
 					id: 1,
-					label: 'filtered acceleration',
-					backgroundColor: 'rgba(255, 99, 132, 0.5)',
-					borderColor: 'rgb(255, 99, 132)',
+					label: 'ax',
+					backgroundColor: 'rgba(54, 162, 235, 0.5)',
+					borderColor: 'rgb(54, 162, 235)',
+					cubicInterpolationMode: 'monotone',
 					data: [],
 				},
 				{
 					id: 2,
-					label: 'ax',
-					backgroundColor: 'rgba(54, 162, 235, 0.5)',
-					borderColor: 'rgb(54, 162, 235)',
+					label: 'ay',
+					borderColor: 'rgb(255,165,0)',
+					backgroundColor: 'rgb(255,165,0,0.1)',
+					cubicInterpolationMode: 'monotone',
 					data: [],
 				},
 				{
 					id: 3,
-					label: 'ay',
-					borderColor: 'rgb(255,165,0)',
-					backgroundColor: 'rgb(255,165,0,0.1)',
-					data: [],
-				},
-				{
-					id: 4,
 					label: 'az',
 					borderColor: 'rgb(60,186,159)',
 					backgroundColor: 'rgb(60,186,159,0.1)',

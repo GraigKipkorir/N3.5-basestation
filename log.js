@@ -2,6 +2,17 @@ const mqtt = require('paho-mqtt');
 global.WebSocket = require('ws');
 let fs = require('fs');
 
+function getCurrentTimestamp() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+  
+    return `${year}-${month}-${day}-${hours}:${minutes}:${seconds},`;
+}
 client = new mqtt.Client("127.0.0.1", 1883, "logger");
  
 // set callback handlers
@@ -35,7 +46,7 @@ function onConnectionLost(responseObject) {
 function onMessageArrived(message) {
     // console.log("onMessageArrived:");
     try{
-        fs.appendFile(filename,new Date().toUTCString()+message.payloadString+'\n',(e)=>{
+        fs.appendFile(filename,getCurrentTimestamp()+message.payloadString+'\n',(e)=>{
             if(e){
                 console.log(e);
             }

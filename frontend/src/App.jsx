@@ -9,7 +9,7 @@ import Telemetry from './components/telemetry';
 import Map from './components/Map';
 import setting from './assets/setting.svg';
 
-let client = new MQTT.Client("192.168.0.105", 1883, "dashboard");
+let client = new MQTT.Client("192.168.100.2", 1883, "dashboard");
 //called when client connects
 let onConnect = () => {
 	console.log("connected");
@@ -36,7 +36,6 @@ function App() {
 	let [latitude,setLatitude] = useState(-1.0953775626377544);
 	let [longitude,setLongitude] = useState(37.01223403257954);
 	let [state,setState] = useState(0);
-	let [temperature,setTemperature] = useState(0);
 	let [connectionStatus,setConnectionStatus] = useState('disconnected');
 	let [stream,setStream] = useState(true);
 	
@@ -55,26 +54,27 @@ function App() {
 		// let newData = JSON.parse(message.payloadString);
 		let newData = message.payloadString.split(',');
 		let time = Date.now();
-		setAltitude(newData[7]);
-		setGx(newData[4]);
-		setGy(newData[5]);
-		setGz(newData[6]);
-		// setLatitude(newData[11]);
-		// setLongitude(newData[12]);
-		// setState(newData[13]);
-		// setTemperature(newData[14]);
-		altitudeChartRef.current.data.datasets[0].data.push({x: time, y:newData[4]});
-		altitudeChartRef.current.data.datasets[1].data.push({x: time, y:newData[5]});
-		altitudeChartRef.current.update('quiet');
-		//
-		velocityChartRef.current.data.datasets[0].data.push({x: time, y:newData[9]});
-		velocityChartRef.current.update('quiet');
-		//
-		accelerationChartRef.current.data.datasets[0].data.push({x: time, y:newData[1]});//filterd_a
-		accelerationChartRef.current.data.datasets[1].data.push({x: time, y:newData[2]});
-		accelerationChartRef.current.data.datasets[2].data.push({x: time, y:newData[3]});
-		accelerationChartRef.current.data.datasets[3].data.push({x: time, y:newData[9]});
-		accelerationChartRef.current.update('quiet');
+		console.log(newData.length);
+		if(newData.length===15){
+			setAltitude(newData[8]);
+			setGx(newData[4]);
+			setGy(newData[5]);
+			setGz(newData[6]);
+			setLatitude(newData[11]);
+			setLongitude(newData[12]);
+			// setState(newData[13]);
+			// setTemperature(newData[14]);
+			altitudeChartRef.current.data.datasets[0].data.push({x: time, y:newData[7]});
+			altitudeChartRef.current.update('quiet');
+			//
+			velocityChartRef.current.data.datasets[0].data.push({x: time, y:newData[9]});
+			velocityChartRef.current.update('quiet');
+			//
+			accelerationChartRef.current.data.datasets[0].data.push({x: time, y:newData[1]});//ax
+			accelerationChartRef.current.data.datasets[1].data.push({x: time, y:newData[2]});
+			accelerationChartRef.current.data.datasets[2].data.push({x: time, y:newData[3]});
+			accelerationChartRef.current.update('quiet');
+		}
 	}
 
 	// set callback handlers
