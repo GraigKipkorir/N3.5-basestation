@@ -9,7 +9,7 @@ import Telemetry from './components/telemetry';
 import Map from './components/Map';
 import setting from './assets/setting.svg';
 
-let client = new MQTT.Client("192.168.100.2", 1883, "dashboard");
+let client = new MQTT.Client("192.168.0.106", 1883, "dashboard");
 //called when client connects
 let onConnect = () => {
 	console.log("connected");
@@ -30,6 +30,7 @@ function App() {
 	}
 
 	let [altitude,setAltitude] = useState(0);//filterd altitude
+	let [agl,setAGL] = useState(0);//filterd altitude
 	let [gx,setGx] = useState(toRadians(0));
 	let [gy,setGy] = useState(toRadians(180));
 	let [gz,setGz] = useState(toRadians(0));
@@ -57,6 +58,7 @@ function App() {
 		console.log(newData.length);
 		if(newData.length===15){
 			setAltitude(newData[8]);
+			setAGL(newData[7]);
 			setGx(newData[4]);
 			setGy(newData[5]);
 			setGz(newData[6]);
@@ -94,6 +96,7 @@ function App() {
 					</span>
 					<span>State:{state} </span>
 					<span>Altitude: {altitude}</span>
+					<span>AGL: {agl}</span>
 					<span>Longitude:{longitude} </span>
 					<span>Latitude: {latitude} </span>
 					<button onClick={e=>{document.getElementById('settings').style.visibility='visible'}}><img src={setting} className=""/></button>

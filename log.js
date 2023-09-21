@@ -46,7 +46,7 @@ function onConnectionLost(responseObject) {
 function onMessageArrived(message) {
     // console.log("onMessageArrived:");
     try{
-        fs.appendFile(filename,getCurrentTimestamp()+message.payloadString+'\n',(e)=>{
+        fs.appendFile(filename,getCurrentTimestamp()+message.payloadString,(e)=>{
             if(e){
                 console.log(e);
             }
