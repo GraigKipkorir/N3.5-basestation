@@ -34,37 +34,27 @@ highestThrust = 3000;
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
-
+let filePath = "../drone_logs/drone1.csv"
 // called when the client connects
 function onConnect() {
   // Once a connection has been made, make a subscription and send a message.
   console.log("onConnect");
   //read from csv
-  let fileStream = fs.createReadStream('tanafull.csv');
+  const fileStream = fs.createReadStream(filePath);
   const rl = readline.createInterface({
     input: fileStream,
     crlfDelay: Infinity
   });
-  while (false) {
-    rl.on('line', (input) => {
-      message = new mqtt.Message(input);
-      message.destinationName = "esp32";
-      client.send(message);
-      console.log(`Sent: ${input}`);
-      sleep(1000);
-    });
-  }
-  // client.subscribe("esp32");
-  //{y-acceleration:200.00, velocity:127.99, altitude:132.23, pressure: 1013.23}
-  //123456789,1214.23,1201.45,230.45,12.23,1.03,0.23,12.00,4.55,3.21,1.97,-1.0953775626377544, 37.01223403257954,PRE_FLIGHT_GROUND_STATE,44.999
-  let id = 0;
-  let setMessaage = ()=>{
-    message = new mqtt.Message(`${id},${new Date().toUTCString()},123456789,1214.23,1201.45,230.45,12.23,1.03,0.23,12.00,4.55,3.21,1.97,-1.0953775626377544, 37.01223403257954,PRE_FLIGHT_GROUND_STATE,44.999`);
+  rl.on('line', (line) => {
+    const columns = line.split(',');
+    console.log(columns.slice(1).join(','));
+    message = new mqtt.Message(columns.slice(1).join(','));
     message.destinationName = "n3/telemetry";
-    id+=1;
-    return message;
-  }
-  setInterval(() => {client.send(setMessaage())}, 100);
+    client.send(message);
+    for(let i = 0; i < 10; i++){
+        console.log(Math.sqrt(i));
+    }
+   });
 }
  
 // called when the client loses its connection

@@ -9,7 +9,7 @@ import Telemetry from './components/telemetry';
 import Map from './components/Map';
 import setting from './assets/setting.svg';
 
-let client = new MQTT.Client("192.168.0.106", 1883, "dashboard");
+let client = new MQTT.Client("127.0.0.1", 1883, "dashboard");
 //called when client connects
 let onConnect = () => {
 	console.log("connected");
