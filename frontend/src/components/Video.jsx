@@ -1,14 +1,19 @@
 import React, { useRef, useEffect, useState } from 'react';
 import gsap from 'gsap';
-import Map from './Map';
 import logo from '../assets/nakuja_logo.png'
 
-function Video({ url }) {
-	console.log('video', url);
-	const image = useRef(null);
-	let [stream,setStream] = useState(true);
+let url="ws://127.0.0.1:8080";
+let socket = {};
 
-	useEffect(() => {
+export default function Video() {
+	console.log('video', url);
+	let autoReconnect;
+
+	const image = useRef(null);
+	let [stream,setStream] = useState(false);
+	let [frame, setFrame] = useState("");
+
+	let animate = ()=>{
 		gsap.to(image.current, {
 			rotation: '+=360',
 			scale: 0.5,
@@ -17,12 +22,35 @@ function Video({ url }) {
 			duration: 0.7,
 			ease: 'power2.inOut',
 		});
+	}
+	useEffect(() => {
+		animate();
+		socket = new WebSocket(url);
+		socket.onopen = () => {
+            setStream(true);
+			console.log("Socket connected");
+			clearInterval(autoReconnect);
+        }
+		socket.onclose = ()=>{
+			setStream(false);
+			console.log("Lost Socket");
+			autoReconnect = setInterval(()=>{
+				socket = new WebSocket(url);
+			}, 3000);
+		}
+		socket.onmessage = e => {
+			console.log("new frame");
+			let jpeg = URL.createObjectURL(new Blob([e.data], { type: 'image/jpeg' }));
+			setFrame(jpeg);
+		}
 	}, []);
-	
+	useEffect(()=>{animate()},[stream]);
 
 	return (
 		<>
-		<div className="w-full h-[297px] md:h-[603px] lg:h-[500px] bg-black flex justify-center items-center">
+			<div className="w-full h-[297px] md:h-[603px] lg:h-[500px] bg-black flex justify-center items-center">
+				{
+					!stream && 
 					<div ref={image}>
 						<img
 							alt="logo"
@@ -31,9 +59,12 @@ function Video({ url }) {
 							height="80"
 						/>
 					</div>
-				</div>
+				}
+				{
+					stream && 
+					<img className='text-white w-full h-full' src={frame} alt="streaming..." />
+				}
+			</div>
 		</>
 	);
 }
-
-export default Video;

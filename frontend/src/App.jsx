@@ -9,7 +9,7 @@ import Telemetry from './components/telemetry';
 import Map from './components/Map';
 import setting from './assets/setting.svg';
 
-let client = new MQTT.Client("127.0.0.1", 1883, "dashboard");
+let client = new MQTT.Client("192.168.0.105", 1883, "dashboard");
 //called when client connects
 let onConnect = () => {
 	console.log("connected");
@@ -97,8 +97,7 @@ function App() {
 					<span>State:{state} </span>
 					<span>Altitude: {altitude}</span>
 					<span>AGL: {agl}</span>
-					<span>Longitude:{longitude} </span>
-					<span>Latitude: {latitude} </span>
+					<span>Speed:{100}m/s </span>
 					<button onClick={e=>{document.getElementById('settings').style.visibility='visible'}}><img src={setting} className=""/></button>
 				</div>
 				<div className="grid grid-cols-1 lg:grid-cols-3">
@@ -107,11 +106,11 @@ function App() {
 							<button id={stream?'active':''} onClick={(e)=>{setStream(true)}}>Live Stream</button>
 							<button id={stream?'':'active'} onClick={(e)=>{setStream(false)}}>Map</button>
 						</div>
-						{stream?
-						<Video
-							url={'http://192.168.0.103:81/stream'}
-						/>
-						:<Map position={[latitude,longitude]}/>
+						{
+						stream?
+						<Video/>
+						:
+						<Map position={[latitude,longitude]}/>
 						}
 					</div>
 					<Telemetry />
