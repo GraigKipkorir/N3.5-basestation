@@ -30,11 +30,11 @@ let LineChart = forwardRef( (props,ref) => {
 
     switch(props.type){
         case 'altitude':
-            ylabel = 'AGL (m)';
+            ylabel = 'Altitude (m)';
             dataset = [
 				{
 					id: 1,
-					label: 'AGL',
+					label: 'Altitude',
 					backgroundColor: 'rgba(54, 162, 235, 0.5)',
 					borderColor: 'rgb(54, 162, 235)',
 					cubicInterpolationMode: 'monotone',

@@ -9,11 +9,12 @@ import Telemetry from './components/telemetry';
 import Map from './components/Map';
 import setting from './assets/setting.svg';
 
-let client = new MQTT.Client("192.168.0.105", 1883, "dashboard");
+let client = new MQTT.Client("127.0.0.1", 1883, `dashboard-${((new Date()).getTime()).toString().slice(4)}`);
 //called when client connects
 let onConnect = () => {
 	console.log("connected");
 	client.subscribe("n3/telemetry");
+	document.getElementById('connected').innerHTML = "MQTT connected";
 }
 // connect the client
 client.connect({
@@ -37,7 +38,6 @@ function App() {
 	let [latitude,setLatitude] = useState(-1.0953775626377544);
 	let [longitude,setLongitude] = useState(37.01223403257954);
 	let [state,setState] = useState(0);
-	let [connectionStatus,setConnectionStatus] = useState('disconnected');
 	let [stream,setStream] = useState(true);
 	
 	// called when the client loses its connection
@@ -57,7 +57,6 @@ function App() {
 		let time = Date.now();
 		console.log(newData.length);
 		if(newData.length===15){
-			setAltitude(newData[8]);
 			setAGL(newData[7]);
 			setGx(newData[4]);
 			setGy(newData[5]);
@@ -66,7 +65,7 @@ function App() {
 			setLongitude(newData[12]);
 			// setState(newData[13]);
 			// setTemperature(newData[14]);
-			altitudeChartRef.current.data.datasets[0].data.push({x: time, y:newData[7]});
+			altitudeChartRef.current.data.datasets[0].data.push({x: time, y:newData[8]});
 			altitudeChartRef.current.update('quiet');
 			//
 			velocityChartRef.current.data.datasets[0].data.push({x: time, y:newData[9]});
@@ -87,15 +86,14 @@ function App() {
   return (
 		<div className="lg:max-h-screen max-w-screen overflow-hidden">
 			<main className="p-2">
-				<div className="text-sm lg:text-base text-center">
-					The WebSocket is currently {connectionStatus}
+				<div id='connected' className="text-sm lg:text-base text-center">
+					MQTT not connected
 				</div>
 				<div className="text-xs lg:text-base md:w-2/3 mx-auto font-bold flex flex-wrap justify-between">
 					<span className=' text-3xl'>
-					T{true?'-':'+'} <Countdown target="May 18, 2023 18:00:00"/>
+					T{true?'-':'+'} <Countdown target="November 27, 2023 13:00:00"/>
 					</span>
 					<span>State:{state} </span>
-					<span>Altitude: {altitude}</span>
 					<span>AGL: {agl}</span>
 					<span>Speed:{100}m/s </span>
 					<button onClick={e=>{document.getElementById('settings').style.visibility='visible'}}><img src={setting} className=""/></button>
@@ -113,7 +111,7 @@ function App() {
 						<Map position={[latitude,longitude]}/>
 						}
 					</div>
-					<Telemetry />
+					{/* <Telemetry /> */}
 					<div className="lg:order-first w-full lg:w-12/12 lg:col-span-2">
 						<Model x={gx} y={gy} z={gz} />
 					</div>

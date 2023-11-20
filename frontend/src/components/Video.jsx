@@ -1,6 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
 import gsap from 'gsap';
-import logo from '../assets/nakuja_logo.png'
 
 let url="ws://127.0.0.1:8080";
 let socket = {};
@@ -54,7 +53,7 @@ export default function Video() {
 					<div ref={image}>
 						<img
 							alt="logo"
-							src={logo}
+							src="/nakuja_logo.png"
 							width="90"
 							height="80"
 						/>
