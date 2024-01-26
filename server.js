@@ -2,7 +2,7 @@ let express = require('express');
 let path = require('path');
 
 const app = express();
-const port = 8081;
+const port = 8082;
 
 // sendFile will go here
 app.use(express.static(path.join(__dirname,'frontend', 'dist')));

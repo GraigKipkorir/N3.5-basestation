@@ -41,6 +41,15 @@ let LineChart = forwardRef( (props,ref) => {
 					data: [],
 					pointRadius: 2,
 				},
+				{
+					id: 2,
+					label: 'Filterd_s',
+					backgroundColor: 'rgba(154, 2, 25, 0.5)',
+					borderColor: 'rgb(54, 162, 235)',
+					cubicInterpolationMode: 'monotone',
+					data: [],
+					pointRadius: 2,
+				}
 			];
             break;
         case 'velocity':
@@ -80,6 +89,13 @@ let LineChart = forwardRef( (props,ref) => {
 					label: 'az',
 					borderColor: 'rgb(60,186,159)',
 					backgroundColor: 'rgb(60,186,159,0.1)',
+					data: [],
+				},
+				{
+					id: 4,
+					label: 'filterd_a',
+					borderColor: 'rgb(180,0,0)',
+					backgroundColor: 'rgb(160,1,1,0.1)',
 					data: [],
 				},
 			];

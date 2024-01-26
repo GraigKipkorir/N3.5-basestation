@@ -9,7 +9,7 @@ import Telemetry from './components/telemetry';
 import Map from './components/Map';
 import setting from './assets/setting.svg';
 
-let client = new MQTT.Client("127.0.0.1", 1883, `dashboard-${((new Date()).getTime()).toString().slice(4)}`);
+let client = new MQTT.Client("192.168.78.19", 1883, `dashboard-${((new Date()).getTime()).toString().slice(4)}`);
 //called when client connects
 let onConnect = () => {
 	console.log("connected");
@@ -21,6 +21,7 @@ client.connect({
 	onSuccess:onConnect,
 	keepAliveInterval: 3600,
 });
+let previousAltitude = 0;
 function App() {
 	let altitudeChartRef = useRef();
 	let velocityChartRef = useRef();
@@ -39,6 +40,7 @@ function App() {
 	let [longitude,setLongitude] = useState(37.01223403257954);
 	let [state,setState] = useState(0);
 	let [stream,setStream] = useState(true);
+	let [apogee, setApogee] = useState(0);
 	
 	// called when the client loses its connection
 	let onConnectionLost = (responseObject) => {
@@ -56,16 +58,19 @@ function App() {
 		let newData = message.payloadString.split(',');
 		let time = Date.now();
 		console.log(newData.length);
-		if(newData.length===15){
+		if(newData.length===14){
+			if(parseInt(newData[7])>previousAltitude) setApogee(newData[7]);
+			previousAltitude = parseInt(newData[7]);
+			console.log(`Previous ALT == ${typeof(previousAltitude)}`)
 			setAGL(newData[7]);
 			setGx(newData[4]);
 			setGy(newData[5]);
 			setGz(newData[6]);
 			setLatitude(newData[11]);
 			setLongitude(newData[12]);
-			// setState(newData[13]);
-			// setTemperature(newData[14]);
-			altitudeChartRef.current.data.datasets[0].data.push({x: time, y:newData[8]});
+			setState(newData[13]);
+			altitudeChartRef.current.data.datasets[0].data.push({x: time, y:newData[7]});
+			altitudeChartRef.current.data.datasets[1].data.push({x: time, y:newData[8]});
 			altitudeChartRef.current.update('quiet');
 			//
 			velocityChartRef.current.data.datasets[0].data.push({x: time, y:newData[9]});
@@ -74,6 +79,7 @@ function App() {
 			accelerationChartRef.current.data.datasets[0].data.push({x: time, y:newData[1]});//ax
 			accelerationChartRef.current.data.datasets[1].data.push({x: time, y:newData[2]});
 			accelerationChartRef.current.data.datasets[2].data.push({x: time, y:newData[3]});
+			accelerationChartRef.current.data.datasets[3].data.push({x: time, y:newData[10]});
 			accelerationChartRef.current.update('quiet');
 		}
 	}
@@ -93,9 +99,9 @@ function App() {
 					<span className=' text-3xl'>
 					T{true?'-':'+'} <Countdown target="November 27, 2023 13:00:00"/>
 					</span>
-					<span>State:{state} </span>
-					<span>AGL: {agl}</span>
-					<span>Speed:{100}m/s </span>
+					<span>State:{['PRE_FLIGHT','POWERED_FLIGHT','APOGEE','BALLISTIC_DESCENT','PARACHUTE_DESCENT','POST_FLIGHT'][parseInt(state)]} </span>
+					<span>AGL: {agl}m</span>
+					<span>APOGEE: {apogee}m</span>
 					<button onClick={e=>{document.getElementById('settings').style.visibility='visible'}}><img src={setting} className=""/></button>
 				</div>
 				<div className="grid grid-cols-1 lg:grid-cols-3">

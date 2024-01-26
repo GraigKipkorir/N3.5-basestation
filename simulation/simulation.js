@@ -1,15 +1,7 @@
 /**
  * simulate data sent from esp32
- * Data sent includes :
- *  - timestamp
- *  - altitude
- *  - filterd altitude, velocity, & accelaration
- *  - ax,ay,az
- *  - gx,gy,gz
- *  - latitude & longitude
- *  - state
- *  - temperature
- */
+ * Data sent includes : time_log,id,ax,ay,az,gx,gy,gz,AGL,altitude,velocity,pressure,latitude,longitude,time,state
+*/
 // Create a client instance
 const mqtt = require('paho-mqtt');
 const readline = require('readline');
@@ -47,12 +39,12 @@ function onConnect() {
   });
   rl.on('line', (line) => {
     const columns = line.split(',');
-    console.log(columns.slice(1).join(','));
-    message = new mqtt.Message(columns.slice(1).join(','));
-    message.destinationName = "n3/telemetry";
+    console.log(columns[1])
+    message = new mqtt.Message(columns.slice(2).join(','));
+    message.destinationName = "simulation";
     client.send(message);
-    for(let i = 0; i < 10; i++){
-        console.log(Math.sqrt(i));
+    for(let i = 0; i < 99999999; i++){
+      Math.sqrt(i);
     }
    });
 }

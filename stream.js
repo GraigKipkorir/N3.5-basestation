@@ -6,7 +6,7 @@ if (!fs.existsSync(dir)){
 	fs.mkdirSync(dir);
 }
 
-let wss = new WebSocketServer({ port: 8080 });
+let wss = new WebSocketServer({ port: 8081 });
 let clients = []
 let counter = 0;
 console.log("server started");
