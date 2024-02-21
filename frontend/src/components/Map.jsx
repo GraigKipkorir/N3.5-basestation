@@ -41,7 +41,7 @@ export default function Map({position}){
             <MapContainer style={{height:"500px"}} center={position} zoom={15} scrollWheelZoom={true}>
                 <TileLayer
                     attribution='&copy; <a href=\"https://www.maptiler.com/copyright/\" target=\"_blank\">&copy; MapTiler</a> <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\">&copy; OpenStreetMap contributors</a> contributors'
-                    url="http://192.168.78.19:8080/styles/basic-preview/{z}/{x}/{y}.png"
+                    url="http://localhost:8080/styles/basic-preview/{z}/{x}/{y}.png"
                 />
                 {position && <Marker icon={rocket} ref={markerRef} position={position}/>}
                 <Marker icon={icon} ref={markerRef} position={[-1.1069546,37.0151392]}/>

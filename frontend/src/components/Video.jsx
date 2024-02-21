@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import gsap from 'gsap';
 
-let url="ws://192.168.78.19:8081"; //run ifconfig, change ip
+let url="ws://192.168.1.104:8081"; //run ifconfig, change ip
 let socket = {};
 
 export default function Video() {
@@ -61,7 +61,7 @@ export default function Video() {
 				}
 				{
 					stream && 
-					<img className='text-white w-full h-full' src={false?frame:"http://192.168.78.213:8000/stream.mjpg"} alt="streaming..." />
+					<img className='text-white w-full h-full' src={false?frame:"http://192.168.1.104:8000/stream.mjpg"} alt="streaming..." />
 				}
 			</div>
 		</>
