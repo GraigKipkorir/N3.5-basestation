@@ -1,9 +1,12 @@
 import {useEffect, useState, useRef} from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
-import "leaflet/dist/leaflet.css"
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import "leaflet/dist/leaflet.css";
 import L, { marker } from 'leaflet';
 
+
+
 export default function Map({position}){
+    
     let markerRef = useRef(null);
     let icon = L.icon({
         iconUrl: '/marker.png',
@@ -35,16 +38,30 @@ export default function Map({position}){
         console.error("Geolocation is not supported by your browser.");
       }
 
+    // return(
+    //     <div>
+    //         <h3>Map</h3>
+    //         <MapContainer style={{height:"500px"}} center={position} zoom={15} scrollWheelZoom={true}>
+    //             <TileLayer
+    //                 attribution='&copy; <a href=\"https://www.maptiler.com/copyright/\" target=\"_blank\">&copy; MapTiler</a> <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\">&copy; OpenStreetMap contributors</a> contributors'
+    //                 url="http://localhost:8080/styles/basic-preview/{z}/{x}/{y}.png"
+    //             />
+    //             {position && <Marker icon={rocket} ref={markerRef} position={position}/>}
+    //             <Marker icon={icon} ref={markerRef} position={[-1.1069546,37.0151392]}/>
+    //         </MapContainer>
+    //     </div>
+    // )
+
     return(
         <div>
             <h3>Map</h3>
             <MapContainer style={{height:"500px"}} center={position} zoom={15} scrollWheelZoom={true}>
                 <TileLayer
                     attribution='&copy; <a href=\"https://www.maptiler.com/copyright/\" target=\"_blank\">&copy; MapTiler</a> <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\">&copy; OpenStreetMap contributors</a> contributors'
-                    url="http://localhost:8080/styles/basic-preview/{z}/{x}/{y}.png"
+                    url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
                 {position && <Marker icon={rocket} ref={markerRef} position={position}/>}
-                <Marker icon={icon} ref={markerRef} position={[-1.1069546,37.0151392]}/>
+                <Marker icon={icon} ref={markerRef} position={[-1.0956457,37.0132567]}/>
             </MapContainer>
         </div>
     )

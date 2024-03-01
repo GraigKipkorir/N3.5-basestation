@@ -47,6 +47,7 @@ export default function Video() {
 
 	return (
 		<>
+            <h3>Stream</h3>
 			<div className="w-full h-[297px] md:h-[603px] lg:h-[500px] bg-black flex justify-center items-center">
 				{
 					!stream && 

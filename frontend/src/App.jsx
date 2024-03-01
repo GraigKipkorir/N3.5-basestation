@@ -11,6 +11,7 @@ import setting from './assets/setting.svg';
 import{MQTT_SERVER, MIN_DELAY_BETWEEN_MESSAGES, WEBSOCKET_PORT} from './components/defs.js'
 
 
+
 function App() {
 	let altitudeChartRef = useRef();
 	let velocityChartRef = useRef();
@@ -169,26 +170,15 @@ function App() {
 							<span>APOGEE: {apogee}m</span>
 							<button onClick={e=>{document.getElementById('settings').style.visibility='visible'}}><img src={setting} className=""/></button>
 						</div>
-						<div className="grid grid-cols-1 lg:grid-cols-3">
+						<div className="grid grid-cols-1 md:grid-cols-3">
 							<div>
-								<div className='choice'>
-									<button id={stream? 'active' : ''} onClick={(e) => {setStream(true)}}>
-										Live Stream
-									</button>
-									<button id={stream? '' : 'active'} onClick={(e) => {setStream(false)}}>
-										Map
-									</button>
-								</div>
-								{
-								stream?
-								<Video/>
-								:
-								<Map position={[latitude,longitude]}/>
-								}
+							<Model x={gx} y={gy} z={gz} />
 							</div>
-							{/* <Telemetry /> */}
-							<div className="lg:order-first w-full lg:w-12/12 lg:col-span-2">
-								<Model x={gx} y={gy} z={gz} />
+							<div>
+								<Map position={[latitude,longitude]}/>
+							</div>
+							<div className="">
+								<Video/>
 							</div>
 						</div>
 						<div className="grid grid-cols-1 lg:grid-cols-3">
